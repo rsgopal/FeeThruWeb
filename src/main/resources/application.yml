@@ -1,0 +1,13 @@
+spring:
+  data:
+    mongodb:
+      uri: ${db_url}
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    properties:
+      mail.smtp:
+        auth: true
+        starttls.enable: true
+    username: ${email_user}
+    password: ${email_password}

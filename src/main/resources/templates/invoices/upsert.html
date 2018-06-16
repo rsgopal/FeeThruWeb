@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title th:text="(${invoice.id} ? 'Update' : 'Add') + ' Invoice'">Upsert</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="row" th:if="${invoice.id}">
+			<div class="col-md-12 text-center">
+				<!-- <a th:unless="${invoice.active}"
+					th:href="'/accounts/activate/' + ${account.id}"
+					class="btn btn-success"
+					onclick="return confirm('Are you sure you want to activate?');">Activate
+					Account</a> <a th:if="${account.active}"
+					th:href="'/accounts/disable/' + ${account.id}"
+					class="btn btn-warning"
+					onclick="return confirm('Are you sure you want to disable?');">Disable
+					Account</a> <a th:href="'/accounts/delete/' + ${account.id}"
+					class="btn btn-danger"
+					onclick="return confirm('Are you sure you want to delete?');">Delete
+					Account</a>-->
+			</div>
+		</div>
+		<p />
+		<div class="row">
+			<div class="offset-md-3 col-md-6">
+				<form action="/invoice/save" method="POST">
+					<input type="hidden" name="id" id="id" th:if="${invoice.id}"
+						th:value="${invoice.id}" />
+					<div class="form-group">
+						<label for="name"><strong>Account <span
+								style="color: red">*</span></strong></label> <select name="account"
+							th:each="account: ${accounts}">
+							<option th:value="${account.id}" th:text="${account.displayName}"></option>
+						</select>
+					</div>
+					<div class="text-right">
+						<a href="/accounts" class="btn btn-secondary">Cancel</a>
+						<button type="submit" class="btn btn-primary">Save</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

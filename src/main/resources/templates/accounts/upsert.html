@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title th:text="(${account.id} ? 'Update' : 'Add') + ' Account'">Upsert</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="row" th:if="${account.id}">
+			<div class="col-md-12 text-center">
+				<a th:unless="${account.active}"
+					th:href="'/accounts/activate/' + ${account.id}"
+					class="btn btn-success"
+					onclick="return confirm('Are you sure you want to activate?');">Activate
+					Account</a> <a th:if="${account.active}"
+					th:href="'/accounts/disable/' + ${account.id}"
+					class="btn btn-warning"
+					onclick="return confirm('Are you sure you want to disable?');">Disable
+					Account</a> <a th:href="'/accounts/delete/' + ${account.id}"
+					class="btn btn-danger"
+					onclick="return confirm('Are you sure you want to delete account and all associated invoices?');">Delete
+					Account</a>
+			</div>
+		</div>
+		<p />
+		<div class="row">
+			<div class="offset-md-3 col-md-6">
+				<form action="/accounts/save" method="POST">
+					<input type="hidden" name="id" id="id" th:if="${account.id}"
+						th:value="${account.id}" />
+					<div class="form-group">
+						<label for="name"><strong>Name <span
+								style="color: red">*</span></strong></label> <input type="text" name="name"
+							class="form-control" id="name"
+							placeholder="Enter Contact's Full Name - e.g. Parent's name" required="required"
+							th:value="${account.name}">
+					</div>
+					<div class="form-group">
+						<label for="desc"><strong>Description</strong></label> <input
+							type="text" name="desc" class="form-control" id="desc"
+							placeholder="Enter an optional description - e.g. Students's Mom" th:value="${account.desc}">
+					</div>
+					<div class="form-group">
+						<label for="name"><strong>Email <span
+								style="color: red">*</span></strong></label> <input type="email" name="email"
+							class="form-control" id="email"
+							placeholder="Enter Contact's Email or phone@carrier.email" required="required"
+							th:value="${account.email}">
+					</div>
+					<div class="form-group">
+						<label for="amount"><strong>Monthly Amount <span
+								style="color: red">*</span></strong></label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<div class="input-group-text">$</div>
+							</div>
+							<input type="number" name="amount" class="form-control"
+								id="amount" placeholder="Enter monthly amount" min="0"
+								required="required" th:value="${account.amount}">
+						</div>
+					</div>
+					<div class="text-right">
+						<a href="/accounts" class="btn btn-secondary">Cancel</a>
+						<button type="submit" class="btn btn-primary">Save</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
