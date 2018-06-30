@@ -1,0 +1,10 @@
+#!/bin/bash -e
+#
+# S2I run script for the 'feethru_os_image' image.
+# The run script executes the server that runs your application.
+#
+# For more information see the documentation:
+#	https://github.com/openshift/source-to-image/blob/master/docs/builder_image.md
+#
+
+exec java -mx512M -Ddb_url="mongodb://admin:Janakan!23@cluster0-shard-00-00-nlaxy.mongodb.net:27017,cluster0-shard-00-01-nlaxy.mongodb.net:27017,cluster0-shard-00-02-nlaxy.mongodb.net:27017/feethru?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true" -Demail_user=rsgopal -Demail_password=minanjal_gmail -jar /opt/app-root/app.jar
