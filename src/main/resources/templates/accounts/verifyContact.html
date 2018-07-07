@@ -1,0 +1,14 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Contact Verification</title>
+<script type="text/javascript">
+	function alertAndClose(email) {
+		alert('Verification email sent to ' + email + ". Click OK to close.");
+		window.close();
+	}
+</script>
+</head>
+<body th:onload="'alertAndClose(\'' + ${email}+ '\')'">
+	<h4 th:text="'Verification email sent to ' + ${email}"></h4>
+</body>
+</html>

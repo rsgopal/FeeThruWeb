@@ -1,5 +1,7 @@
 package com.janakan.feethru.model;
 
+import java.util.Date;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
@@ -22,4 +24,5 @@ public class Transaction {
 	private float amount;
 	private Type type;
 	private String desc;
+	private Date date;
 }

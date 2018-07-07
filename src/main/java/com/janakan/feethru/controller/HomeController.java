@@ -2,8 +2,10 @@ package com.janakan.feethru.controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Date;
 import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,7 @@ import com.janakan.feethru.model.Transaction.Type;
 import com.janakan.feethru.repository.AccountsRepository;
 import com.janakan.feethru.repository.InvoicesRepository;
 import com.janakan.feethru.repository.TransactionRepository;
+import com.janakan.feethru.service.EmailService;
 
 @Controller
 public class HomeController {
@@ -55,9 +58,12 @@ public class HomeController {
 	@Autowired
 	private TransactionRepository transactionReposiory;
 
+	@Autowired
+	private EmailService emailService;
+
 	@GetMapping("")
 	public String main(Model model) {
-		List<Invoice> invoices = invoicesRepository.findAllByIsClosed(false);
+		Set<Invoice> invoices = new TreeSet<Invoice>(invoicesRepository.findAllByIsClosed(false));
 		if (invoices.isEmpty()) {
 			Message.addMessage(model, Severity.warning, "There are no open invoices. Go to Invoices to generate them.");
 		}
@@ -76,6 +82,9 @@ public class HomeController {
 			transactionReposiory
 					.saveAll(newTransactions(account, paidAndDiscountAmounts[0], paidAndDiscountAmounts[1]));
 			accountsRepository.save(account.credit(paidAndDiscountAmounts[0] + paidAndDiscountAmounts[1]));
+			// emailService.sendEmail(account.getEmail(), "Payment Received",
+			// "Thank you for your dance class payment of $" + (int)
+			// paidAndDiscountAmounts[0] + ".");
 			Message.addMessage(redirectAttributes, Severity.success,
 					"Transaction for " + account.getDisplayName() + " successfully processed.");
 		}
@@ -93,11 +102,12 @@ public class HomeController {
 	private Collection<Transaction> newTransactions(Account account, float payAmount, float excusedAmount) {
 		Collection<Transaction> transactions = new ArrayList<>();
 		if (payAmount > 0) {
-			transactions.add(new Transaction(null, account, payAmount, Type.credit, "Regular Payment"));
+			transactions.add(new Transaction(null, account, payAmount, Type.credit, "Regular Payment", new Date()));
 		}
 		if (excusedAmount > 0) {
 			transactions.add(new Transaction(null, account, excusedAmount, Type.discount,
-					"Excused $" + excusedAmount + (payAmount > 0 ? " after payment of $" + payAmount : "")));
+					"Excused $" + excusedAmount + (payAmount > 0 ? " after payment of $" + payAmount : ""),
+					new Date()));
 		}
 		return transactions;
 	}

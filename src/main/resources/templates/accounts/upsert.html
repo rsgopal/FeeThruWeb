@@ -3,6 +3,18 @@
 	layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org">
 <head>
 <title th:text="(${account.id} ? 'Update' : 'Add') + ' Account'">Upsert</title>
+<script type="text/javascript">
+	function verifyContact() {
+		var msg = prompt(
+				'Email Message',
+				'Hi. This is Janani. I am sending this from my Email. Can you please confirm that you received this? Thanks.');
+		if (msg != null) {
+			var email = $("#email").val();
+			window.open('/accounts/verifyContact?email=' + email + "&msg="
+					+ msg)
+		}
+	}
+</script>
 </head>
 <body>
 	<div layout:fragment="content">
@@ -32,20 +44,27 @@
 						<label for="name"><strong>Name <span
 								style="color: red">*</span></strong></label> <input type="text" name="name"
 							class="form-control" id="name"
-							placeholder="Enter Contact's Full Name - e.g. Parent's name" required="required"
-							th:value="${account.name}">
+							placeholder="Enter Contact's Full Name - e.g. Parent's name"
+							required="required" th:value="${account.name}">
 					</div>
 					<div class="form-group">
 						<label for="desc"><strong>Description</strong></label> <input
 							type="text" name="desc" class="form-control" id="desc"
-							placeholder="Enter an optional description - e.g. Students's Mom" th:value="${account.desc}">
+							placeholder="Enter an optional description - e.g. Students's Mom"
+							th:value="${account.desc}">
 					</div>
 					<div class="form-group">
 						<label for="name"><strong>Email <span
-								style="color: red">*</span></strong></label> <input type="email" name="email"
-							class="form-control" id="email"
-							placeholder="Enter Contact's Email or phone@carrier.email" required="required"
-							th:value="${account.email}">
+								style="color: red">*</span></strong></label>
+						<div class="input-group mb-3">
+							<input type="email" name="email" class="form-control" id="email"
+								placeholder="Enter Contact's Email or phone@carrier.email"
+								required="required" th:value="${account.email}">
+							<div class="input-group-append">
+								<a href="#" onclick="verifyContact();" class="btn btn-tertiary"
+									type="button">Verify</a>
+							</div>
+						</div>
 					</div>
 					<div class="form-group">
 						<label for="amount"><strong>Monthly Amount <span

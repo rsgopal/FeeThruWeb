@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class Invoice {
+public class Invoice implements Comparable<Invoice> {
 	@Id
 	private String id;
 	private Date billDate;
@@ -33,5 +33,16 @@ public class Invoice {
 
 	public Notification toNotification() {
 		return new Notification(this);
+	}
+
+	@Override
+	public int compareTo(Invoice o) {
+		if (o == null || o.account == null || o.account.getDisplayName() == null) {
+			return -1;
+		}
+		if (account == null || account.getDisplayName() == null) {
+			return 1;
+		}
+		return account.getDisplayName().compareTo(o.account.getDisplayName());
 	}
 }

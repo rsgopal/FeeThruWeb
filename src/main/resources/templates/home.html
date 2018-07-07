@@ -33,12 +33,16 @@
 								</div>
 							</div>
 							<div class="text-right">
-								<button name="transactionType" class="btn btn-success btn-sm" type="submit"
-									value="paid">Paid</button>
-								<button name="transactionType" class="btn btn-primary btn-sm" type="submit"
-									value="paidAndExcused">Paid / Excused</button>
-								<button name="transactionType" type="submit" class="btn btn-secondary btn-sm"
-									value="excused">Excused</button>
+								<button name="transactionType" class="btn btn-success btn-sm"
+									type="submit" value="paid"
+									onclick="return confirm('Are you sure?');">Paid</button>
+								<button name="transactionType" class="btn btn-primary btn-sm"
+									type="submit" value="paidAndExcused"
+									onclick="return confirm('Are you sure?');">Paid /
+									Excused</button>
+								<button name="transactionType" type="submit"
+									class="btn btn-secondary btn-sm" value="excused"
+									onclick="return confirm('Are you sure?');">Excused</button>
 							</div>
 						</form>
 					</div>

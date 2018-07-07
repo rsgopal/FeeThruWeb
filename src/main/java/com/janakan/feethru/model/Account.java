@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class Account {
+public class Account implements Comparable<Account> {
 	@Id
 	private String id;
 	private String name;
@@ -45,5 +45,16 @@ public class Account {
 	public Account credit(float amount) {
 		balance -= amount;
 		return this;
+	}
+
+	@Override
+	public int compareTo(Account o) {
+		if (o == null || o.getDisplayName() == null) {
+			return -1;
+		}
+		if (getDisplayName() == null) {
+			return 1;
+		}
+		return getDisplayName().compareTo(o.getDisplayName());
 	}
 }

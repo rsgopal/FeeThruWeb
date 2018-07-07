@@ -2,6 +2,8 @@ package com.janakan.feethru.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.janakan.feethru.controller.Message.Severity;
@@ -17,6 +20,7 @@ import com.janakan.feethru.model.Account;
 import com.janakan.feethru.model.Invoice;
 import com.janakan.feethru.repository.AccountsRepository;
 import com.janakan.feethru.repository.InvoicesRepository;
+import com.janakan.feethru.service.EmailService;
 
 @Controller
 @RequestMapping("/accounts")
@@ -27,9 +31,12 @@ public class AccountsController {
 	@Autowired
 	private InvoicesRepository invoicesRepository;
 
+	@Autowired
+	private EmailService emailService;
+
 	@GetMapping("")
 	public String index(Model model) {
-		List<Account> accounts = accountsRepository.findAll();
+		Set<Account> accounts = new TreeSet<Account>(accountsRepository.findAll());
 		model.addAttribute("accounts", accounts);
 		return "accounts/index";
 	}
@@ -86,6 +93,13 @@ public class AccountsController {
 					account.getName() + "'s account successfully disabled.");
 		}
 		return "redirect:/accounts";
+	}
+
+	@GetMapping("/verifyContact")
+	public String verifyContact(@RequestParam String email, @RequestParam String msg, Model model) {
+		emailService.sendEmail(email, "Hello", msg);
+		model.addAttribute("email", email);
+		return "accounts/verifyContact";
 	}
 
 	@PostMapping("/save")

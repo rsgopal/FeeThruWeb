@@ -3,6 +3,8 @@ package com.janakan.feethru.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +39,8 @@ public class InvoicesController {
 
 	@GetMapping("")
 	public String index(@RequestParam(required = false) boolean showAll, Model model) {
-		List<Invoice> invoices = showAll ? invoicesRepository.findAll() : invoicesRepository.findAllByIsClosed(false);
+		Set<Invoice> invoices = new TreeSet<Invoice>(
+				showAll ? invoicesRepository.findAll() : invoicesRepository.findAllByIsClosed(false));
 		model.addAttribute("invoices", invoices);
 		return "invoices/index";
 	}
