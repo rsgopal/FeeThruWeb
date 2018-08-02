@@ -45,9 +45,14 @@ public class NotificationController {
 	public String main(Model model) {
 		NotificationList notificationList = new NotificationList();
 		Set<Notification> notifications = new TreeSet<Notification>(invoicesRepository.findAllByIsClosed(false).stream()
-				.map(invoice -> invoice.toNotification()).collect(Collectors.toList()));
-		notificationList.setItems(notifications);
-		model.addAttribute("notificationList", notificationList);
+				.filter(invoice -> invoice.getAccount().isEmailVerified()).map(invoice -> invoice.toNotification())
+				.collect(Collectors.toList()));
+		if (notifications.isEmpty()) {
+			Message.addMessage(model, Severity.warning, "No invoices or accounts with verified emails found.");
+		} else {
+			notificationList.setItems(notifications);
+			model.addAttribute("notificationList", notificationList);
+		}
 		return "notifications/index";
 	}
 
@@ -55,7 +60,7 @@ public class NotificationController {
 	public String send(NotificationList notificationList, RedirectAttributes redirectAttributes) {
 		notificationList.getItems().stream().filter(notif -> notif.getInvoice() != null).forEach(notif -> {
 			Account account = notif.getInvoice().getAccount();
-			emailService.sendEmail(account.getEmail(), notif.getSubject(), notif.getMessage());
+			emailService.sendEmail(account, notif.getSubject(), notif.getMessage());
 			account.setLastNotificationDate(new Date());
 			accountsRepository.save(account);
 		});

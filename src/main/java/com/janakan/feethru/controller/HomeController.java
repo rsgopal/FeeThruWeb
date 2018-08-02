@@ -82,9 +82,8 @@ public class HomeController {
 			transactionReposiory
 					.saveAll(newTransactions(account, paidAndDiscountAmounts[0], paidAndDiscountAmounts[1]));
 			accountsRepository.save(account.credit(paidAndDiscountAmounts[0] + paidAndDiscountAmounts[1]));
-			// emailService.sendEmail(account.getEmail(), "Payment Received",
-			// "Thank you for your dance class payment of $" + (int)
-			// paidAndDiscountAmounts[0] + ".");
+			//emailService.sendEmail(account, "Payment Received",
+			//		"Thank you for your dance class payment of $" + (int) paidAndDiscountAmounts[0] + ".");
 			Message.addMessage(redirectAttributes, Severity.success,
 					"Transaction for " + account.getDisplayName() + " successfully processed.");
 		}

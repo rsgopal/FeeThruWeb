@@ -14,67 +14,69 @@
 </head>
 <body>
 	<div layout:fragment="content">
-		<form action="/notifications/send" method="post">
-			<div class="row">
-				<div class="col-md-12">
-					<div class="text-right">
-						<button type="submit" class="btn btn-primary">Send
-							Notifications</button>
+		<div th:if="${notificationList}">
+			<form action="/notifications/send" method="post">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="text-right">
+							<button type="submit" class="btn btn-primary">Send
+								Notifications</button>
+						</div>
 					</div>
 				</div>
-			</div>
-			<p />
-			<table class="table table-striped table-bordered">
-				<thead class="thead-dark">
-					<tr>
-						<th scope="col"><div class="text-center">
-								<input name="selectAll" id="selectAll" type="checkbox"
-									onclick="massCheck()" checked="checked"> <label
-									for="selectAll">Select Account</label>
-							</div></th>
-					</tr>
-					<tr>
-						<th scope="col" colspan="2">Details</th>
-					</tr>
-				</thead>
-				<tbody>
-					<th:block th:each="notification,stat: ${notificationList.items}">
+				<p />
+				<table class="table table-striped table-bordered">
+					<thead class="thead-dark">
 						<tr>
-							<td>
-								<div class="card">
-									<div class="card-header">
-										<input type="checkbox" class="notificationSelect"
-											th:field="*{notificationList.items[__${stat.index}__].invoice}"
-											th:value="*{notificationList.items[__${stat.index}__].invoice.id}">
-										<label th:for="'items' + ${stat.index} + '.invoice1'"
-											th:text="${notification.invoice.account.displayName} + ' ' + ${notification.invoice.account.email}">
-										</label>
-									</div>
-									<div class="card-body">
-										<div class="card-text">
-											<label>Billed on:</label> <span
-												th:text="${#dates.format(notification.invoice.billDate, 'MMM dd, yyyy')}"></span>
-											<br />
-											<div
-												th:if="${notification.invoice.account.lastNotificationDate}">
-												<label>Last Notified:</label> <span
-													th:text="${notification.invoice.account.lastNotificationDate ?: ''}"></span>
+							<th scope="col"><div class="text-center">
+									<input name="selectAll" id="selectAll" type="checkbox"
+										onclick="massCheck()" checked="checked"> <label
+										for="selectAll">Select Account</label>
+								</div></th>
+						</tr>
+						<tr>
+							<th scope="col" colspan="2">Details</th>
+						</tr>
+					</thead>
+					<tbody>
+						<th:block th:each="notification,stat: ${notificationList.items}">
+							<tr>
+								<td>
+									<div class="card">
+										<div class="card-header">
+											<input type="checkbox" class="notificationSelect"
+												th:field="*{notificationList.items[__${stat.index}__].invoice}"
+												th:value="*{notificationList.items[__${stat.index}__].invoice.id}">
+											<label th:for="'items' + ${stat.index} + '.invoice1'"
+												th:text="${notification.invoice.account.displayName} + ' ' + ${notification.invoice.account.email}">
+											</label>
+										</div>
+										<div class="card-body">
+											<div class="card-text">
+												<label>Billed on:</label> <span
+													th:text="${#dates.format(notification.invoice.billDate, 'MMM dd, yyyy')}"></span>
+												<br />
+												<div
+													th:if="${notification.invoice.account.lastNotificationDate}">
+													<label>Last Notified:</label> <span
+														th:text="${notification.invoice.account.lastNotificationDate ?: ''}"></span>
+												</div>
+												<label>Subject:</label><br />
+												<textarea cols="35"
+													th:field="*{notificationList.items[__${stat.index}__].subject}"></textarea>
+												<br /> <label>Message:</label><br />
+												<textarea cols="35"
+													th:field="*{notificationList.items[__${stat.index}__].message}"></textarea>
 											</div>
-											<label>Subject:</label><br />
-											<textarea cols="35"
-												th:field="*{notificationList.items[__${stat.index}__].subject}"></textarea>
-											<br /> <label>Message:</label><br />
-											<textarea cols="35"
-												th:field="*{notificationList.items[__${stat.index}__].message}"></textarea>
 										</div>
 									</div>
-								</div>
-							</td>
-						</tr>
-					</th:block>
-				</tbody>
-			</table>
-		</form>
+								</td>
+							</tr>
+						</th:block>
+					</tbody>
+				</table>
+			</form>
+		</div>
 	</div>
 </body>
 </html>

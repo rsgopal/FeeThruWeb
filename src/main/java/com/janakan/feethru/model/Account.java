@@ -19,6 +19,7 @@ public class Account implements Comparable<Account> {
 	private float amount;
 	private float balance;
 	private boolean isActive = true;
+	private boolean isEmailVerified = false;
 	private Date lastNotificationDate;
 
 	public String getDisplayName() {
@@ -38,7 +39,7 @@ public class Account implements Comparable<Account> {
 
 	public Account update(Account currAccount) {
 		this.balance = currAccount.balance;
-		this.isActive = currAccount.isActive;
+		// this.isActive = currAccount.isActive;
 		return this;
 	}
 

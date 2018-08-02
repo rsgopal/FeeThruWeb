@@ -28,13 +28,17 @@
 			<tbody>
 				<th:block th:each="account: ${accounts}">
 					<tr style="cursor: pointer;"
-						th:onclick="'window.location=\'/accounts/edit/' + ${account.id} + '\''"
-						th:classAppend="${account.active} ? 'alert-success' : 'alert-light'">
-						<td colspan="2"><strong><span
-								th:text="${account.name}"></span> <th:block
-									th:unless="${account.desc.empty}"> / <span
-										th:text="${account.desc}"></span>
-								</th:block> / <span th:text="${account.email}"></span></strong></td>
+						th:onclick="'window.location=\'/accounts/edit/' + ${account.id} + '\''">
+						<td colspan="2"><div
+								th:classAppend="${account.active} ? 'alert-success' : 'alert-light'">
+								<strong> <span th:text="${account.name}"></span> <th:block
+										th:unless="${account.desc.empty}"> / <span
+											th:text="${account.desc}"></span>
+									</th:block></strong>
+							</div>
+							<div th:if="${account.emailVerified}">
+								<span th:text="${account.email}"></span>
+							</div></td>
 					</tr>
 					<tr>
 						<td th:text="${account.amount}"></td>
