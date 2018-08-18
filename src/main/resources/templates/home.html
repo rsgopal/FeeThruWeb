@@ -9,7 +9,7 @@
 <body>
 	<div layout:fragment="content">
 		<div class="card-columns">
-			<div class="card" th:each="invoice: ${invoices}"
+			<div class="card" th:each="invoice,stat: ${invoices}"
 				th:classAppend="${invoice.amount > invoice.account.amount} ? 'border-danger' : 'border-success'">
 				<div class="card-header"
 					th:classAppend="${invoice.amount > invoice.account.amount} ? 'bg-danger' : 'bg-success'">
@@ -20,16 +20,28 @@
 						<form method="post" action="transaction">
 							<input type="hidden" name="id" th:value="${invoice.id}" />
 							<div class="form-group row">
-								<label for="amount" class="col-form-label col-sm-3"><strong>Amount
+								<label th:for="|amount${stat.index}|"
+									class="col-form-label col-sm-3"><strong>Amount
 										<span style="color: red">*</span>
 								</strong></label>
 								<div class="input-group col-sm-9">
 									<div class="input-group-prepend">
 										<div class="input-group-text">$</div>
 									</div>
-									<input type="number" name="amount" id="amount"
-										class="form-control" min="0" required="required"
-										th:value="${invoice.amount}">
+									<input type="number" name="amount"
+										th:id="|amount${stat.index}|" class="form-control" min="0"
+										required="required" th:value="${invoice.amount}">
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="custom-control custom-checkbox col-sm-12">
+									<input type="checkbox"
+										class="custom-control-input"
+										name="sendNotification"
+										th:id="|sendNotification${stat.index}|" checked="checked"/><label
+										class="custom-control-label"
+										th:for="|sendNotification${stat.index}|">Send
+										notification</label>
 								</div>
 							</div>
 							<div class="text-right">

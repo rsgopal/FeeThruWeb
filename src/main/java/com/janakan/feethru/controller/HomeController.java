@@ -72,7 +72,7 @@ public class HomeController {
 	}
 
 	@PostMapping(value = "/transaction")
-	public String transaction(String id, TransactionType transactionType, float amount,
+	public String transaction(String id, TransactionType transactionType, float amount, boolean sendNotification,
 			RedirectAttributes redirectAttributes) {
 		Invoice invoice = loadInvoice(id, redirectAttributes);
 		if (invoice != null) {
@@ -82,7 +82,7 @@ public class HomeController {
 			transactionReposiory
 					.saveAll(newTransactions(invoice, paidAndDiscountAmounts[0], paidAndDiscountAmounts[1]));
 			accountsRepository.save(account.credit(paidAndDiscountAmounts[0] + paidAndDiscountAmounts[1]));
-			if (paidAndDiscountAmounts[0] > 0) {
+			if (sendNotification && paidAndDiscountAmounts[0] > 0) {
 				emailService.sendEmail(account, "Payment Received",
 						"Thank you for your dance class payment of $" + (int) paidAndDiscountAmounts[0] + ".");
 			}
