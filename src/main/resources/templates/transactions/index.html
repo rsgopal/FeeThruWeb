@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Manage Transactions</title>
+<script type="text/javascript">
+	function changeYear(event) {
+		window.location = 'transactions?year=' + event.value;
+	}
+</script>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="text-right">
+			<label for="currentYear">Year: </label> <select name="currentYear"
+				id="currentYear" onchange="changeYear(this);">
+				<option th:each="year: ${years}" th:value="${year}"
+					th:text="${year}" th:selected="${year == currentYear}"></option>
+			</select>
+		</div>
+		<p />
+		<table class="table table-striped table-bordered table-sm"
+			th:unless="${transactionsByMonth.isEmpty()}">
+			<thead class="thead-dark">
+				<tr>
+					<th scope="col">Details</th>
+				</tr>
+			</thead>
+			<tbody>
+				<th:block th:each="month: ${transactionsByMonth.keySet()}">
+					<th:block th:each="tx, status: ${transactionsByMonth.get(month)}">
+						<tr style="cursor: pointer;"
+							th:onclick="'window.location=\'/transactions/edit/' + ${tx.id} + '\''"
+							title="Click to update">
+							<td><span
+								th:text="|On ${#calendars.format(tx.date,'dd MMM, yyyy')} at ${#calendars.format(tx.date, 'HH:mm')}"></span><br />
+								<span th:text="|For ${tx.account.displayName} - ${tx.desc}|"></span><br />
+								<span th:text="|Applied ${tx.type} of $${tx.amount}|"></span>
+								<div th:if="${tx.billDate}">
+									<span
+										th:text="|For invoice on ${#calendars.format(tx.billDate,'dd MMM, yyyy')} at ${#calendars.format(tx.billDate,'HH:mm')}"></span><br />
+								</div></td>
+						</tr>
+					</th:block>
+					<tr class="table-info">
+						<td class="h6"><span
+							th:text="|${T(java.text.DateFormatSymbols).getInstance().getMonths()[month]} Total|"></span><br />
+							<th:block
+								th:each="type: ${T(com.janakan.feethru.model.Transaction.Type).values()}">
+								<span
+									th:text="|&nbsp;&nbsp;&nbsp;&nbsp;${#strings.capitalize(type)}: ${totalByMonthAndType.get(month).get(type) ?: 0.0}|"></span>
+								<br />
+							</th:block></td>
+					</tr>
+				</th:block>
+				<tr class="table-primary">
+					<td class="h5"><span>Year Total</span><br /> <th:block
+							th:each="type: ${T(com.janakan.feethru.model.Transaction.Type).values()}">
+							<span
+								th:text="|&nbsp;&nbsp;&nbsp;&nbsp;${#strings.capitalize(type)}: ${totalByType.get(type) ?: 0.0}|"></span>
+							<br />
+						</th:block></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>

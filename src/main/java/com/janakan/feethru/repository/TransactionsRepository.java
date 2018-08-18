@@ -8,6 +8,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.janakan.feethru.model.Transaction;
 
-public interface TransactionRepository extends MongoRepository<Transaction, String> {
+public interface TransactionsRepository extends MongoRepository<Transaction, String> {
 	public List<Transaction> findAllByDateBetween(Sort sort, Date start, Date end);
 }

@@ -49,7 +49,7 @@ public class InvoicesController {
 	public String create(Model model) {
 		InvoiceList invoiceList = new InvoiceList();
 		List<Account> activeAccounts = accountsRepository.findAllByIsActive(true);
-		activeAccounts.stream().forEach(account -> invoiceList.getItems().add(account.toInvoice()));
+		invoiceList.setItems(activeAccounts.stream().map(account -> account.toInvoice()).collect(Collectors.toList()));
 		model.addAttribute("invoiceList", invoiceList);
 		return "invoices/generate";
 	}

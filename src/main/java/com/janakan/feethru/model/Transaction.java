@@ -14,27 +14,21 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Transaction implements Comparable<Transaction> {
+public class Transaction {
 	public enum Type {
 		credit, debit, discount;
 	}
 
 	@Id
 	private String id;
+
 	@DBRef
 	private Account account;
 	private float amount;
 	private Type type;
 	private String desc;
 	private Date date;
-
-	@Override
-	public int compareTo(Transaction o) {
-		if (o == null || o.date == null) {
-			return -1;
-		}
-		return date.compareTo(o.date);
-	}
+	private Date billDate;
 
 	@Transient
 	public int getTransactionMonth() {

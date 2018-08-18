@@ -21,7 +21,7 @@ import com.janakan.feethru.model.Transaction;
 import com.janakan.feethru.model.Transaction.Type;
 import com.janakan.feethru.repository.AccountsRepository;
 import com.janakan.feethru.repository.InvoicesRepository;
-import com.janakan.feethru.repository.TransactionRepository;
+import com.janakan.feethru.repository.TransactionsRepository;
 import com.janakan.feethru.service.EmailService;
 
 @Controller
@@ -56,7 +56,7 @@ public class HomeController {
 	private AccountsRepository accountsRepository;
 
 	@Autowired
-	private TransactionRepository transactionReposiory;
+	private TransactionsRepository transactionReposiory;
 
 	@Autowired
 	private EmailService emailService;
@@ -80,10 +80,12 @@ public class HomeController {
 			float[] paidAndDiscountAmounts = transactionType.getPaidAndDiscountAmounts(invoice.getAmount(), amount);
 			invoicesRepository.save(invoice.close());
 			transactionReposiory
-					.saveAll(newTransactions(account, paidAndDiscountAmounts[0], paidAndDiscountAmounts[1]));
+					.saveAll(newTransactions(invoice, paidAndDiscountAmounts[0], paidAndDiscountAmounts[1]));
 			accountsRepository.save(account.credit(paidAndDiscountAmounts[0] + paidAndDiscountAmounts[1]));
-			//emailService.sendEmail(account, "Payment Received",
-			//		"Thank you for your dance class payment of $" + (int) paidAndDiscountAmounts[0] + ".");
+			if (paidAndDiscountAmounts[0] > 0) {
+				emailService.sendEmail(account, "Payment Received",
+						"Thank you for your dance class payment of $" + (int) paidAndDiscountAmounts[0] + ".");
+			}
 			Message.addMessage(redirectAttributes, Severity.success,
 					"Transaction for " + account.getDisplayName() + " successfully processed.");
 		}
@@ -98,15 +100,16 @@ public class HomeController {
 		});
 	}
 
-	private Collection<Transaction> newTransactions(Account account, float payAmount, float excusedAmount) {
+	private Collection<Transaction> newTransactions(Invoice invoice, float payAmount, float excusedAmount) {
 		Collection<Transaction> transactions = new ArrayList<>();
 		if (payAmount > 0) {
-			transactions.add(new Transaction(null, account, payAmount, Type.credit, "Regular Payment", new Date()));
+			transactions.add(new Transaction(null, invoice.getAccount(), payAmount, Type.credit, "Regular Payment",
+					new Date(), invoice.getBillDate()));
 		}
 		if (excusedAmount > 0) {
-			transactions.add(new Transaction(null, account, excusedAmount, Type.discount,
-					"Excused $" + excusedAmount + (payAmount > 0 ? " after payment of $" + payAmount : ""),
-					new Date()));
+			transactions.add(new Transaction(null, invoice.getAccount(), excusedAmount, Type.discount,
+					"Excused $" + excusedAmount + (payAmount > 0 ? " after payment of $" + payAmount : ""), new Date(),
+					invoice.getBillDate()));
 		}
 		return transactions;
 	}

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Update Transaction</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="row" th:if="${transaction.id}">
+			<div class="col-md-12 text-center">
+				<a th:href="'/transactions/delete/' + ${transaction.id}"
+					class="btn btn-danger"
+					onclick="return confirm('Are you sure you want to delete the transaction?');">Delete
+					Transaction</a>
+			</div>
+		</div>
+		<p />
+		<div class="row">
+			<div class="offset-md-3 col-md-6">
+				<form>
+					<input type="hidden" name="id" id="id" th:if="${transaction.id}"
+						th:value="${transaction.id}" />
+					<div class="form-group">
+						<label><strong>Transaction Date</strong></label><input
+							class="form-control" disabled="disabled" readonly="readonly"
+							th:value="${#calendars.format(transaction.date,'dd MMM, yyyy HH:mm')}" />
+					</div>
+
+					<div class="form-group">
+						<label><strong>Account</strong></label> <input
+							class="form-control" disabled="disabled" readonly="readonly"
+							th:value="${transaction.account.displayName}" />
+					</div>
+					<div class="form-group">
+						<label><strong>Invoice Date</strong></label><input
+							class="form-control" disabled="disabled" readonly="readonly"
+							th:value="${#calendars.format(transaction.billDate,'dd MMM, yyyy HH:mm')}" />
+					</div>
+					<div class="form-group">
+						<label for="amount"><strong>Amount</strong></label> <input
+							disabled="disabled" readonly="readonly" type="number"
+							class="form-control" placeholder="Enter amount"
+							th:field="${transaction.amount}" min="0" step="0.01">
+					</div>
+					<div class="form-group">
+						<label for="type"><strong>Type </strong></label> <select
+							disabled="disabled" class="form-control"
+							th:field="${transaction.type}">
+							<option
+								th:each="type: ${T(com.janakan.feethru.model.Transaction.Type).values()}"
+								th:value="${type}" th:text="${type}"></option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="desc"><strong>Desc</strong></label> <input type="text"
+							disabled="disabled" readonly="readonly" class="form-control"
+							placeholder="Description" th:field="${transaction.desc}">
+					</div>
+					<div class="text-right">
+						<a href="/transactions" class="btn btn-secondary">Cancel</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -14,7 +14,7 @@ public class EmailService {
 
 	public void sendEmail(Account account, String subject, String msg) {
 		if (account.isEmailVerified()) {
-			sendEmail(account, subject, msg);
+			sendEmail(account.getEmail(), subject, msg);
 		}
 	}
 
