@@ -1,13 +1,7 @@
 buildscript {
-	ext {
-		springBootVersion = '2.0.2.RELEASE'
-	}
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
+	ext { springBootVersion = '2.0.2.RELEASE' }
+	repositories { mavenCentral() }
+	dependencies { classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") }
 }
 
 apply plugin: 'java'
@@ -19,17 +13,16 @@ group = 'com.janakan.feethru'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
-repositories {
-	mavenCentral()
-}
+repositories { mavenCentral() }
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-mongodb')
 	compile('org.springframework.boot:spring-boot-starter-mail')
-	compile('org.springframework.boot:spring-boot-starter-quartz')
 	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
 	compile('nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.0.5')
 	compile('org.springframework.boot:spring-boot-starter-web')
+	compile("org.springframework.boot:spring-boot-starter-security")
+	compile('com.auth0:mvc-auth-commons:1.+')
 	runtime('org.springframework.boot:spring-boot-devtools')
 	runtime('org.springframework.boot:spring-boot-starter-actuator')
 	compileOnly('org.projectlombok:lombok')
