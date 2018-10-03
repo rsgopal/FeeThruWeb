@@ -15,7 +15,7 @@ import com.auth0.AuthenticationController;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class AppConfig extends WebSecurityConfigurerAdapter {
 	@Value(value = "${com.auth0.domain}")
 	private String domain;
@@ -26,10 +26,9 @@ public class AppConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable();
-		http.authorizeRequests().antMatchers("/callback", "/login").permitAll().antMatchers("/**").authenticated().and()
-				.logout().permitAll();
-		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);
+		http.csrf().disable().authorizeRequests().antMatchers("/callback", "/login").permitAll().antMatchers("/**")
+				.authenticated().and().logout().permitAll().and().sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.NEVER).and().formLogin().loginPage("/login");
 	}
 
 	@Bean
