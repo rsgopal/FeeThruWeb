@@ -34,7 +34,7 @@ public class Account implements Comparable<Account> {
 	public Invoice toInvoice() {
 		Invoice invoice = new Invoice();
 		invoice.setAccount(this);
-		invoice.setAmount(amount + balance);
+		invoice.setAmount(getAmountDue());
 		return invoice;
 	}
 
