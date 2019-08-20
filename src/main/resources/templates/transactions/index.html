@@ -34,7 +34,7 @@
 							title="Click to update">
 							<td><span
 								th:text="|On ${#calendars.format(tx.date,'dd MMM, yyyy')} at ${#calendars.format(tx.date, 'HH:mm')}"></span><br />
-								<span th:text="|For ${tx.account.displayName} - ${tx.desc}|"></span><br />
+								<span th:text="|For ${tx?.account?.displayName} - ${tx.desc}|"></span><br />
 								<span th:text="|Applied ${tx.type} of $${tx.amount}|"></span>
 								<div th:if="${tx.billDate}">
 									<span

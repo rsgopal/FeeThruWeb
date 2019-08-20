@@ -61,6 +61,7 @@ public class TransactionsController {
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.DATE, 1);
 		cal.set(Calendar.MONTH, Calendar.JANUARY);
 		cal.set(Calendar.YEAR, year);
 		return cal.getTime();
@@ -75,8 +76,8 @@ public class TransactionsController {
 		MinMaxDates minMaxDates = aggregateResult.getMappedResults().get(0);
 		int minYear = minMaxDates.getMinDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getYear();
 		int maxYear = minMaxDates.getMaxDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getYear();
-		List<Integer> years = IntStream.range(minYear, maxYear + 1).boxed().collect(Collectors.toList());
-		years.add(years.get(years.size() - 1) - 1);
+		List<Integer> years = IntStream.range(minYear - 1, maxYear + 1).boxed().sorted(Collections.reverseOrder())
+				.collect(Collectors.toList());
 		int yearValueOrDef = year.orElse(Calendar.getInstance().get(Calendar.YEAR));
 		int yearValue = years.stream().filter(yr -> yr == yearValueOrDef).findFirst().orElse(years.get(0));
 		List<Transaction> transactions = transactionsRepository.findAllByDateBetween(Sort.by("date").descending(),

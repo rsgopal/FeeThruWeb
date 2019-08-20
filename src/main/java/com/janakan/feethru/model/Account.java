@@ -1,7 +1,7 @@
 package com.janakan.feethru.model;
 
 import java.util.Date;
-import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.data.annotation.Id;
 
@@ -23,7 +23,8 @@ public class Account implements Comparable<Account> {
 	private Date lastNotificationDate;
 
 	public String getDisplayName() {
-		return name + (Objects.isNull(desc) || desc.trim().isEmpty() ? "" : " (" + desc.trim() + ")");
+		return Optional.ofNullable(name).orElse("<NONE>") + Optional.ofNullable(desc).map(String::trim)
+				.filter(str -> !str.isEmpty()).map(str -> " (" + str + ")").orElse("");
 	}
 
 	public float getAmountDue() {
